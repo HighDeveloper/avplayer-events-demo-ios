@@ -1,9 +1,9 @@
 //
 //  AppDelegate.swift
-//  AVPlayerItem
+//  DemoAVPlayer
 //
-//  Created by High Developer on 7/30/18.
-//  Copyright © 2018 N.N. All rights reserved.
+//  Created by High Developer on 8/1/18.
+//  Copyright © 2018 Test. All rights reserved.
 //
 
 import UIKit
@@ -53,7 +53,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
          application to it. This property is optional since there are legitimate
          error conditions that could cause the creation of the store to fail.
         */
-        let container = NSPersistentContainer(name: "AVPlayerItem")
+        let container = NSPersistentContainer(name: "DemoAVPlayer")
         container.loadPersistentStores(completionHandler: { (storeDescription, error) in
             if let error = error as NSError? {
                 // Replace this implementation with code to handle the error appropriately.

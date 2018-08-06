@@ -6,11 +6,12 @@ class ViewController: UIViewController {
     
     var player:AVPlayer?
     var playerItem:AVPlayerItem?
-    var avpController = AVPlayerViewController()
+    let avpController = AVPlayerViewController()
     var startEventIsActivate = false
     var playEventIsActivate = false
     var pausetEventIsActivate = false
     @IBOutlet weak var viewPlayer: UIView!
+    @IBOutlet weak var informationLabel: UILabel!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -19,29 +20,20 @@ class ViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         
         super.viewWillAppear(animated)
-        
-        // For external videos
-        playerItem = AVPlayerItem(url: URL(string: "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4")!)
-        player = AVPlayer(playerItem: playerItem)
-        // end external videos code
-        
-        /*
-        // For internal videos use
+
         let path = Bundle.main.path(forResource: "video", ofType: "mp4")
         playerItem = AVPlayerItem(url: URL(fileURLWithPath: path!))
         player = AVPlayer(playerItem: playerItem)
-        // end internal videos code
-        */
         
         self.avpController.player = self.player
         avpController.view.frame = viewPlayer.frame
         self.addChildViewController(avpController)
         self.view.addSubview(avpController.view)
         
-        startEventTrigger()
-        playEventTrigger()
-        pauseEventTrigger()
-        finishEventTrigger()
+        initStartEventListener()
+        initPlayEventListener()
+        initPauseEventListener()
+        initFinishEventListener()
         
     }
     
@@ -49,28 +41,28 @@ class ViewController: UIViewController {
         super.didReceiveMemoryWarning()
     }
     
-    func startEventTrigger() {
+    func initStartEventListener() {
         if !startEventIsActivate && !playEventIsActivate && !pausetEventIsActivate {
             player?.addObserver(self, forKeyPath: #keyPath(AVPlayer.rate), options: [.old, .new], context: nil)
         }
         startEventIsActivate = true
     }
     
-    func playEventTrigger() {
+    func initPlayEventListener() {
         if !startEventIsActivate && !playEventIsActivate && !pausetEventIsActivate {
             player?.addObserver(self, forKeyPath: #keyPath(AVPlayer.rate), options: [.old, .new], context: nil)
         }
         playEventIsActivate = true
     }
     
-    func pauseEventTrigger() {
+    func initPauseEventListener() {
         if !startEventIsActivate && !playEventIsActivate && !pausetEventIsActivate {
             player?.addObserver(self, forKeyPath: #keyPath(AVPlayer.rate), options: [.old, .new], context: nil)
         }
         pausetEventIsActivate = true
     }
     
-    func finishEventTrigger() {
+    func initFinishEventListener() {
         NotificationCenter.default.addObserver(self, selector:#selector(playerDidFinishPlaying(note:)), name: .AVPlayerItemDidPlayToEndTime, object: player!.currentItem)
     }
     
@@ -82,21 +74,21 @@ class ViewController: UIViewController {
             
             if newStatus == 1 {
                 if startEventIsActivate {
-                    print("start event")
+                    informationLabel.text = "start event"
                     startEventIsActivate = false
                 } else if playEventIsActivate {
-                    print("play event")
+                    informationLabel.text = "play event"
                 }
             } else if newStatus == 0{
                 if pausetEventIsActivate {
-                    print("pause event")
+                    informationLabel.text = "pause event"
                 }
             }
         }
     }
     
     @objc func playerDidFinishPlaying(note: NSNotification){
-        print("Video Finished")
+        informationLabel.text = "Video Finished"
     }
     
 }
